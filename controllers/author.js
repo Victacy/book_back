@@ -7,11 +7,8 @@ const authenticate=require('../helper/author')
 
 // route to get list of all authors
 authorRouter.get('/', (request, response) => {
-    const authors = new Array()
-    for(let i = 0; i < authData.length; i++){
-        authors.push(authData[i].name)
-    }
-    response.status(200).send(authors)
+   console.log(request)
+   response.send(authData)
 })
 
 authorRouter.post('/',authenticate.authenticateToken,(request,response) => {
@@ -20,27 +17,28 @@ authorRouter.post('/',authenticate.authenticateToken,(request,response) => {
     response.status(201).send(newAuthor)
 })
 
+
+// route to get a specific author with an id
 authorRouter.get('/:authorId',(request,response) =>{
-    let author=authData.find(author=>author["authorId"] === request.params.authorId)
-    if(author){
-        response.status(200).send(author)
-    }else{
-        response.status(400).send("Author id not found")
-    }
+    const authorId=request.params.id
+    const author=authData.find(author=>author.authorId === authorId)
+    response.status(200).send({author})
 
 })
 
 authorRouter.get('/:authorId/books',(request,response) =>{
-    let books=authData.find(author => author["authorId"] ===request.params.authorId)
+    const authorId=request.params.authorId
+    let books=authData.find(author => author.authorId ===authorId)
+    const aBooks=books[0].books
     if(books){
-        response.status(200).send(books.books)
+        response.status(200).send(aBooks)
     }else{
         response.status(200).send('Author id not found')
     }
 })
 
 authorRouter.delete('/:authorId',authenticate.authenticateToken,(request,response) =>{
-  let deleteId=request.params.authorId  
+ response.send({message:"delted successfully"})
 })
 
 
